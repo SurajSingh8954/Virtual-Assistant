@@ -1,5 +1,5 @@
  import uploadOnCloudinary from "../config/cloudinary.js"
-import geminiResponse from "../gemini.js"
+import aiResponse from "../gemini.js";
 import User from "../models/user.model.js"
 import moment from "moment"
  export const getCurrentUser=async (req,res)=>{
@@ -46,13 +46,9 @@ export const askToAssistant=async (req,res)=>{
       user.save()
       const userName=user.name
       const assistantName=user.assistantName
-      const result=await geminiResponse(command,assistantName,userName)
+      const gemResult = await aiResponse(command, assistantName, userName);
 
-      const jsonMatch=result.match(/{[\s\S]*}/)
-      if(!jsonMatch){
-         return res.ststus(400).json({response:"sorry, i can't understand"})
-      }
-      const gemResult=JSON.parse(jsonMatch[0])
+      
       console.log(gemResult)
       const type=gemResult.type
 
@@ -101,6 +97,10 @@ export const askToAssistant=async (req,res)=>{
      
 
    } catch (error) {
-  return res.status(500).json({ response: "ask assistant error" })
-   }
+    console.error(error);
+    return res.status(500).json({
+        response: "ask assistant error",
+        error: error.message
+    });
+}
 }

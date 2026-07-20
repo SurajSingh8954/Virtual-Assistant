@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { userDataContext } from '../context/userContext'
+import { userDataContext } from '../context/UserContext'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import aiImg from "../assets/ai.gif"
@@ -7,7 +7,7 @@ import { CgMenuRight } from "react-icons/cg";
 import { RxCross1 } from "react-icons/rx";
 import userImg from "../assets/user.gif"
 function Home() {
-  const {userData,serverUrl,setUserData,getGeminiResponse}=useContext(userDataContext)
+  const {userData,serverUrl,setUserData,getaiResponse}=useContext(userDataContext)
   const navigate=useNavigate()
   const [listening,setListening]=useState(false)
   const [userText,setUserText]=useState("")
@@ -169,7 +169,7 @@ useEffect(() => {
       recognition.stop();
       isRecognizingRef.current = false;
       setListening(false);
-      const data = await getGeminiResponse(transcript);
+      const data = await getaiResponse(transcript);
       handleCommand(data);
       setAiText(data.response);
       setUserText("");
@@ -196,7 +196,7 @@ useEffect(() => {
 
 
   return (
-    <div className='w-full h-[100vh] bg-gradient-to-t from-[black] to-[#02023d] flex justify-center items-center flex-col gap-[15px]'>
+    <div className='w-full h-[100vh] bg-gradient-to-t from-[black] to-[#02023d] flex justify-center items-center flex-col gap-[15px] overflow-hidden'>
       <CgMenuRight className='lg:hidden text-white absolute top-[20px] right-[20px] w-[25px] h-[25px]' onClick={()=>setHam(true)}/>
       <div className={`absolute lg:hidden top-0 w-full h-full bg-[#00000053] backdrop-blur-lg p-[20px] flex flex-col gap-[20px] items-start ${ham?"translate-x-0":"translate-x-full"} transition-transform`}>
  <RxCross1 className=' text-white absolute top-[20px] right-[20px] w-[25px] h-[25px]' onClick={()=>setHam(false)}/>
@@ -207,9 +207,14 @@ useEffect(() => {
 <h1 className='text-white font-semibold text-[19px]'>History</h1>
 
 <div className='w-full h-[400px] gap-[20px] overflow-y-auto flex flex-col truncate'>
-  {userData.history?.map((his)=>(
-    <div className='text-gray-200 text-[18px] w-full h-[30px]  '>{his}</div>
-  ))}
+  {userData.history?.map((his, index) => (
+  <div
+    key={index}
+    className="text-gray-200 text-[18px] w-full h-[30px]"
+  >
+    {his}
+  </div>
+))}
 
 </div>
 
