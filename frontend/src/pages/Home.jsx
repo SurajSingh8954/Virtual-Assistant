@@ -66,34 +66,47 @@ function Home() {
 synth.speak(utterence);
   }
 
-  const handleCommand=(data)=>{
-    const {type,userInput,response}=data
-      speak(response);
-    
-    if (type === 'google-search') {
-      const query = encodeURIComponent(userInput);
-      window.open(`https://www.google.com/search?q=${query}`, '_blank');
-    }
-     if (type === 'calculator-open') {
-  
-      window.open(`https://www.google.com/search?q=calculator`, '_blank');
-    }
-     if (type === "instagram-open") {
-      window.open(`https://www.instagram.com/`, '_blank');
-    }
-    if (type ==="facebook-open") {
-      window.open(`https://www.facebook.com/`, '_blank');
-    }
-     if (type ==="weather-show") {
-      window.open(`https://www.google.com/search?q=weather`, '_blank');
-    }
+  const handleCommand = (data) => {
+  console.log("Received data:", data);
 
-    if (type === 'youtube-search' || type === 'youtube-play') {
-      const query = encodeURIComponent(userInput);
-      window.open(`https://www.youtube.com/results?search_query=${query}`, '_blank');
-    }
+  const { type, userInput, response } = data;
 
+  console.log("Type:", type);
+  console.log("User Input:", userInput);
+
+  speak(response);
+
+  switch (type) {
+    case "google-search":
+      window.open(`https://www.google.com/search?q=${encodeURIComponent(userInput)}`, "_blank");
+      break;
+
+    case "youtube-search":
+    case "youtube-play":
+      // alert("Opening YouTube");
+      window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(userInput)}`, "_blank");
+      break;
+
+    case "calculator-open":
+      window.open("https://www.google.com/search?q=calculator", "_blank");
+      break;
+
+    case "instagram-open":
+      window.open("https://www.instagram.com/", "_blank");
+      break;
+
+    case "facebook-open":
+      window.open("https://www.facebook.com/", "_blank");
+      break;
+
+    case "weather-show":
+      window.open("https://www.google.com/search?q=weather", "_blank");
+      break;
+
+    default:
+      console.log("Unknown command type:", type);
   }
+};
 
 useEffect(() => {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -163,16 +176,27 @@ useEffect(() => {
 
   recognition.onresult = async (e) => {
     const transcript = e.results[e.results.length - 1][0].transcript.trim();
-    if (transcript.toLowerCase().includes(userData.assistantName.toLowerCase())) {
+    if (
+  userData &&
+  transcript.toLowerCase().includes(userData.assistantName.toLowerCase())
+) {
       setAiText("");
       setUserText(transcript);
       recognition.stop();
       isRecognizingRef.current = false;
       setListening(false);
       const data = await getaiResponse(transcript);
-      handleCommand(data);
-      setAiText(data.response);
-      setUserText("");
+
+console.log("Frontend received:", data);
+
+if (!data) {
+    console.log("No response received from backend");
+    return;
+}
+
+handleCommand(data);
+setAiText(data.response);
+setUserText("");
     }
   };
 
