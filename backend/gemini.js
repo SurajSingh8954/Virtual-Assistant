@@ -33,11 +33,13 @@ Types:
 - instagram-open
 - facebook-open
 - weather-show
+- generate-image
 
 Rules:
 - Remove assistant name from userInput.
 - If Google/YouTube search, keep only the search query in userInput.
 - If asked who created you, answer ${userName}.
+- If type is generate-image, put the image description/prompt in userInput.
 - Return ONLY JSON.
 `;
 

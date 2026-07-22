@@ -2,6 +2,7 @@
 import aiResponse from "../gemini.js";
 import User from "../models/user.model.js"
 import moment from "moment-timezone";
+import axios from "axios"
  export const getCurrentUser=async (req,res)=>{
     try {
         const userId=req.userId
@@ -93,6 +94,17 @@ case "get-month":
             userInput:gemResult.userInput,
             response:gemResult.response,
          });
+
+      case "generate-image": {
+   const prompt = gemResult.userInput
+   const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=768&height=768&nologo=true`
+   return res.json({
+      type,
+      userInput: prompt,
+      response: gemResult.response, // spoken confirmation, e.g. "Here's your image"
+      imageUrl
+   })
+}   
 
          default:
             return res.status(400).json({ response: "I didn't understand that command." })

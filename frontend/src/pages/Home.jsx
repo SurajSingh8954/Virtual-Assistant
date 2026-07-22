@@ -12,6 +12,7 @@ function Home() {
   const [listening,setListening]=useState(false)
   const [userText,setUserText]=useState("")
   const [aiText,setAiText]=useState("")
+  const [aiImageUrl, setAiImageUrl] = useState("")
   const isSpeakingRef=useRef(false)
   const recognitionRef=useRef(null)
   const [ham,setHam]=useState(false)
@@ -75,6 +76,7 @@ synth.speak(utterence);
   console.log("User Input:", userInput);
 
   speak(response);
+  if (type !== "generate-image") setAiImageUrl("")
 
   switch (type) {
     case "google-search":
@@ -102,6 +104,10 @@ synth.speak(utterence);
     case "weather-show":
       window.open("https://www.google.com/search?q=weather", "_blank");
       break;
+    
+    case "generate-image":
+  setAiImageUrl(data.imageUrl)
+  break;  
 
     default:
       console.log("Unknown command type:", type);
@@ -253,6 +259,10 @@ setUserText("");
       {aiText && <img src={aiImg} alt="" className='w-[200px]'/>}
     
     <h1 className='text-white text-[18px] font-semibold text-wrap'>{userText?userText:aiText?aiText:null}</h1>
+
+    {aiImageUrl && (
+  <img src={aiImageUrl} alt="Generated" className='w-[280px] rounded-2xl shadow-lg mt-4' />
+)}
       
     </div>
   )
