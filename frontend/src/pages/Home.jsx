@@ -12,7 +12,6 @@ function Home() {
   const [listening,setListening]=useState(false)
   const [userText,setUserText]=useState("")
   const [aiText,setAiText]=useState("")
-  const [aiImageUrl, setAiImageUrl] = useState("")
   const isSpeakingRef=useRef(false)
   const recognitionRef=useRef(null)
   const [ham,setHam]=useState(false)
@@ -76,7 +75,6 @@ synth.speak(utterence);
   console.log("User Input:", userInput);
 
   speak(response);
-  if (type !== "generate-image") setAiImageUrl("")
 
   switch (type) {
     case "google-search":
@@ -104,10 +102,6 @@ synth.speak(utterence);
     case "weather-show":
       window.open("https://www.google.com/search?q=weather", "_blank");
       break;
-    
-    case "generate-image":
-  setAiImageUrl(data.imageUrl)
-  break;  
 
     default:
       console.log("Unknown command type:", type);
@@ -230,7 +224,7 @@ setUserText("");
       <CgMenuRight className='lg:hidden text-white absolute top-[20px] right-[20px] w-[25px] h-[25px]' onClick={()=>setHam(true)}/>
       <div className={`absolute lg:hidden top-0 w-full h-full bg-[#00000053] backdrop-blur-lg p-[20px] flex flex-col gap-[20px] items-start ${ham?"translate-x-0":"translate-x-full"} transition-transform`}>
  <RxCross1 className=' text-white absolute top-[20px] right-[20px] w-[25px] h-[25px]' onClick={()=>setHam(false)}/>
- <button className='min-w-[150px] h-[60px]  text-black font-semibold   bg-white rounded-full cursor-pointer text-[19px] ' onClick={handleLogOut}>Log Out</button>
+ <button className="min-w-[170px] h-[60px] rounded-full bg-gradient-to-r from-red-500 via-pink-500 to-orange-500 text-white font-bold text-[18px] shadow-lg hover:scale-105 hover:shadow-red-400/50 transition-all duration-300 active:scale-95" onClick={handleLogOut}>Log Out</button>
       <button className='min-w-[150px] h-[60px]  text-black font-semibold  bg-white  rounded-full cursor-pointer text-[19px] px-[20px] py-[10px] ' onClick={()=>navigate("/customize")}>Customize your Assistant</button>
 
 <div className='w-full h-[2px] bg-gray-400'></div>
@@ -259,10 +253,6 @@ setUserText("");
       {aiText && <img src={aiImg} alt="" className='w-[200px]'/>}
     
     <h1 className='text-white text-[18px] font-semibold text-wrap'>{userText?userText:aiText?aiText:null}</h1>
-
-    {aiImageUrl && (
-  <img src={aiImageUrl} alt="Generated" className='w-[280px] rounded-2xl shadow-lg mt-4' />
-)}
       
     </div>
   )
