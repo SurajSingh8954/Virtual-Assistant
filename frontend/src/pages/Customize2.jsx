@@ -29,6 +29,7 @@ setLoading(false)
             console.log(error)
         }
     }
+    
 
   return (
     <div className='w-full h-[100vh] bg-gradient-to-t from-[black] to-[#030353] flex justify-center items-center flex-col p-[20px] relative '>
