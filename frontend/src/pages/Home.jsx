@@ -12,6 +12,7 @@ function Home() {
   const [listening,setListening]=useState(false)
   const [userText,setUserText]=useState("")
   const [aiText,setAiText]=useState("")
+  const [imageUrl, setImageUrl] = useState("");
   const isSpeakingRef=useRef(false)
   const recognitionRef=useRef(null)
   const [ham,setHam]=useState(false)
@@ -69,7 +70,7 @@ synth.speak(utterence);
   const handleCommand = (data) => {
   console.log("Received data:", data);
 
-  const { type, userInput, response } = data;
+  const { type, userInput, response, imageUrl } = data;
 
   console.log("Type:", type);
   console.log("User Input:", userInput);
@@ -77,6 +78,12 @@ synth.speak(utterence);
   speak(response);
 
   switch (type) {
+
+     case "generate-image":
+      setImageUrl(imageUrl);
+      speak("Here is your generated image.");
+      break;
+
     case "google-search":
       window.open(`https://www.google.com/search?q=${encodeURIComponent(userInput)}`, "_blank");
       break;
@@ -278,6 +285,27 @@ setUserText("");
     
     <h1 className='text-white text-[18px] font-semibold text-wrap'>{userText?userText:aiText?aiText:null}</h1>
       
+      {imageUrl && (
+  <div className="mt-5 flex flex-col items-center gap-4">
+    <img
+      src={imageUrl}
+      alt="Generated"
+      className="w-[350px] rounded-2xl shadow-lg"
+    />
+
+    <button
+      onClick={() => {
+        const a = document.createElement("a");
+        a.href = imageUrl;
+        a.download = "elara-image.png";
+        a.click();
+      }}
+      className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg"
+    >
+      ⬇ Download Image
+    </button>
+  </div>
+)}
     </div>
   )
 }
