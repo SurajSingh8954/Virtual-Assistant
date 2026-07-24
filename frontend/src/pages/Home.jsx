@@ -10,6 +10,7 @@ function Home() {
   const {userData,serverUrl,setUserData,getaiResponse}=useContext(userDataContext)
   const navigate=useNavigate()
   const [listening,setListening]=useState(false)
+  const [isConversationActive, setIsConversationActive] = useState(false);
   const [userText,setUserText]=useState("")
   const [aiText,setAiText]=useState("")
   const [imageUrl, setImageUrl] = useState("");
@@ -75,14 +76,19 @@ synth.speak(utterence);
   console.log("Type:", type);
   console.log("User Input:", userInput);
 
-  speak(response);
-
+if (response) {
+    speak(response);
+}
   switch (type) {
 
      case "generate-image":
-      setImageUrl(imageUrl);
-      speak("Here is your generated image.");
-      break;
+    setImageUrl(imageUrl);
+
+    if (!response) {
+        speak("Here is your generated image.");
+    }
+
+    break;
 
     case "google-search":
       window.open(`https://www.google.com/search?q=${encodeURIComponent(userInput)}`, "_blank");
@@ -182,30 +188,55 @@ useEffect(() => {
   };
 
   recognition.onresult = async (e) => {
-    const transcript = e.results[e.results.length - 1][0].transcript.trim();
-    if (
-  userData &&
-  transcript.toLowerCase().includes(userData.assistantName.toLowerCase())
-) {
-      setAiText("");
-      setUserText(transcript);
+  const transcript = e.results[e.results.length - 1][0].transcript.trim();
+
+  const assistantName = userData?.assistantName.toLowerCase();
+
+  // First wake up the assistant
+  if (!isConversationActive) {
+
+    if (transcript.toLowerCase().includes(assistantName)) {
+
       recognition.stop();
-      isRecognizingRef.current = false;
-      setListening(false);
-      const data = await getaiResponse(transcript);
 
-console.log("Frontend received:", data);
+      setIsConversationActive(true);
 
-if (!data) {
-    console.log("No response received from backend");
-    return;
-}
+      speak("Yes, how can I help you?");
 
-handleCommand(data);
-setAiText(data.response);
-setUserText("");
+      // Conversation ends after 30 seconds
+      clearTimeout(window.assistantTimer);
+
+      window.assistantTimer = setTimeout(() => {
+        setIsConversationActive(false);
+      }, 30000);
+
     }
-  };
+
+    return;
+  }
+
+  // Already awake → execute command
+  recognition.stop();
+
+  setAiText("");
+  setUserText(transcript);
+
+  const data = await getaiResponse(transcript);
+
+  if (!data) return;
+
+  handleCommand(data);
+
+  setAiText(data.response);
+  setUserText("");
+
+  // Reset timer after every command
+  clearTimeout(window.assistantTimer);
+
+  window.assistantTimer = setTimeout(() => {
+    setIsConversationActive(false);
+  }, 30000);
+};
 
 
     const greeting = new SpeechSynthesisUtterance(`Hello ${userData.name}, what can I help you with?`);
