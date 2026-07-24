@@ -225,7 +225,31 @@ setUserText("");
       <div className={`absolute lg:hidden top-0 w-full h-full bg-[#00000053] backdrop-blur-lg p-[20px] flex flex-col gap-[20px] items-start ${ham?"translate-x-0":"translate-x-full"} transition-transform`}>
  <RxCross1 className=' text-white absolute top-[20px] right-[20px] w-[25px] h-[25px]' onClick={()=>setHam(false)}/>
  <button className="min-w-[170px] h-[60px] rounded-full bg-gradient-to-r from-red-500 via-pink-500 to-orange-500 text-white font-bold text-[18px] shadow-lg hover:scale-105 hover:shadow-red-400/50 transition-all duration-300 active:scale-95" onClick={handleLogOut}>Log Out</button>
-      <button className='min-w-[150px] h-[60px]  text-black font-semibold  bg-white  rounded-full cursor-pointer text-[19px] px-[20px] py-[10px] ' onClick={()=>navigate("/customize")}>Customize your Assistant</button>
+      <button
+    onClick={handleLogOut}
+    className="group relative overflow-hidden min-w-[180px] h-[60px]
+    rounded-2xl bg-gradient-to-r from-red-500 to-pink-600
+    text-white font-bold text-lg shadow-lg
+    transition-all duration-500 hover:scale-105 hover:shadow-red-500/50"
+  >
+    <span className="absolute inset-0 bg-white/20 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
+    <span className="relative z-10 flex items-center justify-center gap-2">
+      🚪 Log Out
+    </span>
+  </button>
+
+  <button
+    onClick={() => navigate("/customize")}
+    className="group relative overflow-hidden min-w-[260px] h-[60px]
+    rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-700
+    text-white font-bold text-lg shadow-lg
+    transition-all duration-500 hover:scale-105 hover:shadow-cyan-500/50"
+  >
+    <span className="absolute inset-0 bg-white/20 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
+    <span className="relative z-10 flex items-center justify-center gap-2">
+      🤖 Customize Assistant
+    </span>
+  </button>
 
 <div className='w-full h-[2px] bg-gray-400'></div>
 <h1 className='text-white font-semibold text-[19px]'>History</h1>
