@@ -75,14 +75,17 @@ synth.speak(utterence);
   console.log("Type:", type);
   console.log("User Input:", userInput);
 
-  speak(response);
-
+if (response) {
+    speak(response);
+}
   switch (type) {
 
      case "generate-image":
-      setImageUrl(imageUrl);
-      speak("Here is your generated image.");
-      break;
+    setImageUrl(imageUrl);
+    break;
+
+    case "general":
+    break;
 
     case "google-search":
       window.open(`https://www.google.com/search?q=${encodeURIComponent(userInput)}`, "_blank");
