@@ -232,7 +232,7 @@ setUserText("");
   return (
     <div className='w-full h-[100vh] bg-gradient-to-t from-[black] to-[#02023d] flex justify-center items-center flex-col gap-[15px] overflow-hidden'>
       <CgMenuRight className='lg:hidden text-white absolute top-[20px] right-[20px] w-[25px] h-[25px]' onClick={()=>setHam(true)}/>
-      <div className={`absolute lg:hidden top-0 w-full h-full bg-[#00000053] backdrop-blur-lg p-[20px] flex flex-col gap-[20px] items-start ${ham?"translate-x-0":"translate-x-full"} transition-transform`}>
+      <div className={`absolute lg:hidden top-0 w-full h-full bg-black backdrop-blur-lg p-[20px] flex flex-col gap-[20px] items-start ${ham?"translate-x-0":"translate-x-full"} transition-transform`}>
  <RxCross1 className=' text-white absolute top-[20px] right-[20px] w-[25px] h-[25px]' onClick={()=>setHam(false)}/>
  <button className="min-w-[170px] h-[60px] rounded-full bg-gradient-to-r from-red-500 via-pink-500 to-orange-500 text-white font-bold text-[18px] shadow-lg hover:scale-105 hover:shadow-red-400/50 transition-all duration-300 active:scale-95" onClick={handleLogOut}>Log Out</button>
       <button
